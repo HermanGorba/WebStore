@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebStore.AutomapperProfiles;
 using WebStore.Data;
 using WebStore.Models.Core;
 
@@ -11,7 +12,7 @@ builder.Services.AddDbContext<WebStoreContext>(options =>
 builder.Services.AddIdentity<WebStoreUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<WebStoreContext>();
 
-
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 builder.Services.AddControllersWithViews();
 

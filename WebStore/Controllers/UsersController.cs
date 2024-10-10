@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebStore.Models.Core;
+using WebStore.Models.DTOs;
 using WebStore.Models.ViewModels;
 
 namespace WebStore.Controllers
@@ -48,6 +49,28 @@ namespace WebStore.Controllers
             var userVM = _mapper.Map<UserDetailsViewModel>(user);
 
             return View(userVM);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateUserDTO createUserDTO) 
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _mapper.Map<WebStoreUser>(createUserDTO);
+                var result = await _userManager.CreateAsync(user, createUserDTO.Password);
+
+                if (result.Succeeded)
+                    return RedirectToAction(nameof(Index));
+
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(createUserDTO);
         }
     }
 }

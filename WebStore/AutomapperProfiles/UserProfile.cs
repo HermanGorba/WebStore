@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using WebStore.Models.Core;
+using WebStore.Models.DTOs;
 using WebStore.Models.ViewModels;
 
 namespace WebStore.AutomapperProfiles
@@ -15,6 +16,10 @@ namespace WebStore.AutomapperProfiles
             CreateMap<WebStoreUser, UserDetailsViewModel>()
                 .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.UserName))
                 .ReverseMap();
+
+            CreateMap<CreateUserDTO, WebStoreUser>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Login));
         }
     }
 }

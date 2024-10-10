@@ -12,6 +12,9 @@ namespace WebStore.AutomapperProfiles
                 .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.UserName))
                 .ReverseMap();
 
+            CreateMap<WebStoreUser, UserDetailsViewModel>()
+                .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.UserName))
+                .ReverseMap();
         }
     }
 }

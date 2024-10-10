@@ -26,5 +26,28 @@ namespace WebStore.Controllers
 
             return View(usersVM);
         }
+
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.Users
+                .Include(user => user.Orders)
+                .ThenInclude(order => order.OrderDetails)
+                .ThenInclude(orderDetail => orderDetail.Product)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userVM = _mapper.Map<UserDetailsViewModel>(user);
+
+            return View(userVM);
+        }
     }
 }

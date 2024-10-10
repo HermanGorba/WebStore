@@ -1,0 +1,83 @@
+﻿@using WebStore.Models.ViewModels;
+@model UserDetailsViewModel;
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h1>User Details</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>User Information</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Login)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Login)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Orders</h4>
+        <hr />
+        @if (Model.Orders is null || !Model.Orders.Any())
+        {
+            <p>No orders found for this user.</p>
+        }
+        else
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>@order.OrderDate.ToString("MMMM dd, yyyy")</td>
+                            <td>@order.TotalAmount.ToString("C")</td>
+                            <td>
+                                <button class="btn btn-sm btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#orderDetails-@order.Id">
+                                    View Details
+                                </button>
+                            </td>
+                        </tr>
+                        <tr id="orderDetails-@order.Id" class="collapse">
+                            <td colspan="3">
+                                <strong>Order Details:</strong>
+                                <ul>
+                                    @foreach (var detail in order.OrderDetails)
+                                    {
+                                        <li>Product: @detail?.Product?.Name - Quantity: @detail?.Quantity - Price: @detail.PriceAtTime.ToString("C")</li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit User</a> |
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

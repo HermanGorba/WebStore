@@ -12,7 +12,5 @@ namespace WebStore.Models.ViewModels
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; } = default!;
-
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

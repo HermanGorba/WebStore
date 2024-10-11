@@ -144,7 +144,7 @@ namespace WebStore.Controllers
             return View(userVM);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName(nameof(Delete))]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -168,7 +168,7 @@ namespace WebStore.Controllers
 
             var userVM = _mapper.Map<UserViewModel>(user);
 
-            return View("Delete", userVM);
+            return View(nameof(Delete), userVM);
         }
 
     }

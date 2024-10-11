@@ -20,6 +20,10 @@ namespace WebStore.AutomapperProfiles
             CreateMap<CreateUserDTO, WebStoreUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Login));
+
+            CreateMap<EditUserDTO, WebStoreUser>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Login))
+                .ReverseMap();
         }
     }
 }

@@ -72,5 +72,57 @@ namespace WebStore.Controllers
             }
             return View(createUserDTO);
         }
+
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id.Value.ToString());
+
+            if (user == null)
+                return NotFound();
+
+            var editUserDTO = _mapper.Map<EditUserDTO>(user);
+
+            return View(editUserDTO);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Guid id, EditUserDTO editUserDTO)
+        {
+            if (id != editUserDTO.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager
+                    .FindByIdAsync(editUserDTO.Id.ToString());
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                _mapper.Map(editUserDTO, user);
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(editUserDTO);
+        }
+
     }
 }

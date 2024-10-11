@@ -1,0 +1,33 @@
+﻿@using WebStore.Models.ViewModels;
+@model UserViewModel;
+
+<div class="container mt-4">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 fw-semibold">Delete User</h2>
+        </div>
+        <div class="card-body">
+            <p class="text-secondary">Are you sure you want to delete this user? This action cannot be undone.</p>
+
+            <div class="alert alert-danger border-danger bg-light p-4 rounded" role="alert">
+                <h5 class="alert-heading mb-3 text-danger fw-bold">@Model.Login</h5>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 fw-bold">Email</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+                </dl>
+            </div>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-end mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary me-3 px-4">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

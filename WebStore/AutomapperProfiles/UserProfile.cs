@@ -24,6 +24,8 @@ namespace WebStore.AutomapperProfiles
             CreateMap<EditUserDTO, WebStoreUser>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Login))
                 .ReverseMap();
+
+            CreateMap<WebStoreUser, ChangePasswordDTO>();
         }
     }
 }

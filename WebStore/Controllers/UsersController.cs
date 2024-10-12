@@ -171,5 +171,53 @@ namespace WebStore.Controllers
             return View(nameof(Delete), userVM);
         }
 
+        public async Task<IActionResult> ChangePassword(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id.Value.ToString());
+
+            if (user == null)
+            { 
+                return NotFound();
+            }
+
+            var changePasswordDTO = _mapper.Map<ChangePasswordDTO>(user);
+
+            return View(changePasswordDTO);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager
+                    .FindByIdAsync(changePasswordDTO.Id.ToString());
+
+                if (user == null) 
+                {
+                    return NotFound();
+                }
+
+                var result = await _userManager
+                    .ChangePasswordAsync(user, changePasswordDTO.CurrentPassword, changePasswordDTO.NewPassword);
+
+                if (result.Succeeded) 
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(changePasswordDTO);
+        }
     }
 }

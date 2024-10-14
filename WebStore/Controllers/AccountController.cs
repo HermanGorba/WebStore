@@ -48,7 +48,7 @@ namespace WebStore.Controllers
             return View(registerVM);
         }
 
-        public async Task<IActionResult> LogIn(string? returnUrl)
+        public async Task<IActionResult> Login(string? returnUrl)
         {
             var loginVM = new LoginViewModel()
             {
@@ -59,7 +59,7 @@ namespace WebStore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogIn(LoginViewModel loginVM)
+        public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
             if (!ModelState.IsValid)
             {

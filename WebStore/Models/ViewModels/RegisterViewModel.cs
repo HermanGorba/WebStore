@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
-namespace WebStore.Models.DTOs
+namespace WebStore.Models.ViewModels
 {
     public class RegisterViewModel
     {

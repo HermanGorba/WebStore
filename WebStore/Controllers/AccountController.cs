@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 using WebStore.Models.Core;
-using WebStore.Models.DTOs;
-using AutoMapper;
+using WebStore.Models.ViewModels;
 
 namespace WebStore.Controllers
 {
@@ -48,6 +46,48 @@ namespace WebStore.Controllers
             }
 
             return View(registerVM);
+        }
+
+        public async Task<IActionResult> LogIn(string? returnUrl)
+        {
+            var loginVM = new LoginViewModel()
+            {
+                ReturnUrl = returnUrl ?? string.Empty
+            };
+
+            return View(loginVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LoginViewModel loginVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(loginVM);
+            }
+            
+            var user = await _userManager.FindByEmailAsync(loginVM.Email);
+
+            if (user == null)
+            {
+                return View(loginVM);
+            }
+
+            var result = await _signInManager
+                .PasswordSignInAsync(user, loginVM.Password, loginVM.RememberMe, false);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Incorrect login or password!");
+                return View(loginVM);
+            }
+
+            if (!string.IsNullOrEmpty(loginVM.ReturnUrl) && Url.IsLocalUrl(loginVM.ReturnUrl))
+            {
+                return Redirect(loginVM.ReturnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
